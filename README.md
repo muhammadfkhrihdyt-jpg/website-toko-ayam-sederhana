@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Toko Ayam Natura Fresh
 
-## Getting Started
+Website toko ayam dan telur berbasis Next.js App Router.
 
-First, run the development server:
+## Struktur Folder
+
+- `app/(frontend)` berisi route halaman yang dilihat user, seperti `/`, `/login`, `/signup`, `/profile`, dan `/cart`.
+- `frontend/components` berisi komponen tampilan. Contoh: header, promo, form login, form signup, dan cart view.
+- `frontend/data` berisi data statis untuk halaman depan.
+- `backend` berisi logic server, database query, auth service, dan session helper.
+- `app/api` berisi Route Handlers untuk endpoint backend-for-frontend.
+- `prisma` berisi schema database.
+- `public` berisi asset gambar brand, produk, dan promo.
+
+## Struktur API
+
+Route Handler Next.js wajib berada di dalam `app` dan memakai file `route.ts`.
+
+- `POST /api/auth/register` untuk registrasi akun.
+- `POST /api/auth/login` untuk login dan membuat cookie session.
+- `POST /api/auth/logout` untuk menghapus cookie session.
+- `GET /api/products` untuk mengambil produk aktif dari database.
+
+Form website tetap memakai Server Actions di `backend/auth/actions.ts`, sedangkan endpoint API memakai service yang sama di `backend/auth/service.ts`. Jadi validasi registrasi/login tidak dobel di banyak tempat.
+
+## Menjalankan Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pastikan `.env` sudah berisi `DATABASE_URL`. Untuk production, tambahkan juga `AUTH_SECRET` agar tanda tangan session cookie stabil dan aman.
