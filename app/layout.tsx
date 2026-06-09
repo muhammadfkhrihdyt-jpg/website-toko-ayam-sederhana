@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/CartContext";
+import { SiteFooter } from "@/frontend/components/home/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Natura Fresh International",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
         </CartProvider>
+        <SiteFooter />
       </body>
     </html>
   );

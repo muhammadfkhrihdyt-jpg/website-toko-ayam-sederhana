@@ -1,8 +1,19 @@
 "use client";
 
-import { CreditCard, Loader2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import {
+  CreditCard,
+  Loader2,
+  MapPin,
+  MessageSquareText,
+  Minus,
+  PackageCheck,
+  Plus,
+  ShoppingCart,
+  Trash2,
+  Truck,
+} from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useTransition } from "react";
 import { checkoutCart } from "@/actions";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/CartContext";
@@ -20,6 +31,11 @@ export type CartProduct = {
 
 type CartViewProps = {
   products: CartProduct[];
+  customer?: {
+    name: string;
+    phone: string | null;
+    address: string | null;
+  } | null;
 };
 
 const formatter = new Intl.NumberFormat("id-ID", {
@@ -28,7 +44,7 @@ const formatter = new Intl.NumberFormat("id-ID", {
   maximumFractionDigits: 0,
 });
 
-export function CartView({ products }: CartViewProps) {
+export function CartView({ products, customer }: CartViewProps) {
   const { items, addProduct, updateQuantity, removeItem, clearCart } = useCart();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -38,7 +54,8 @@ export function CartView({ products }: CartViewProps) {
     [items],
   );
   const shippingCost = subtotal >= 250000 || subtotal === 0 ? 0 : 15000;
-  const total = subtotal + shippingCost;
+  const serviceFee = items.length > 0 ? 1000 : 0;
+  const total = subtotal + shippingCost + serviceFee;
 
   return (
     <section className="bg-[#fbfaf7] py-12 sm:py-16">
@@ -58,8 +75,104 @@ export function CartView({ products }: CartViewProps) {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
-          <div className="rounded-[8px] bg-white shadow-sm ring-1 ring-zinc-200">
+        <form
+          className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]"
+          action={(formData) => {
+            startTransition(async () => {
+              const result = await checkoutCart(
+                items,
+                subtotal,
+                shippingCost,
+                total,
+                {
+                  customerName: String(formData.get("customerName") ?? ""),
+                  customerPhone: String(formData.get("customerPhone") ?? ""),
+                  shippingAddress: String(formData.get("shippingAddress") ?? ""),
+                  notes: String(formData.get("notes") ?? ""),
+                  paymentMethod: String(formData.get("paymentMethod") ?? ""),
+                },
+              );
+
+              if (result?.success) {
+                clearCart();
+                router.push("/profile");
+              } else {
+                alert(result?.message || "Gagal membuat pesanan");
+              }
+            });
+          }}
+        >
+          <div className="space-y-5">
+            <section className="rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-zinc-200">
+              <div className="flex items-center gap-3 text-[#0d7a32]">
+                <MapPin className="h-5 w-5" aria-hidden="true" />
+                <h2 className="text-lg font-bold text-zinc-950">
+                  Alamat Pengiriman
+                </h2>
+              </div>
+
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="customerName"
+                    className="block text-sm font-semibold text-[#007a20]"
+                  >
+                    Nama penerima
+                  </label>
+                  <input
+                    id="customerName"
+                    name="customerName"
+                    type="text"
+                    defaultValue={customer?.name ?? ""}
+                    required
+                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="customerPhone"
+                    className="block text-sm font-semibold text-[#007a20]"
+                  >
+                    Nomor WhatsApp
+                  </label>
+                  <input
+                    id="customerPhone"
+                    name="customerPhone"
+                    type="tel"
+                    defaultValue={customer?.phone ?? ""}
+                    required
+                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label
+                  htmlFor="shippingAddress"
+                  className="block text-sm font-semibold text-[#007a20]"
+                >
+                  Alamat lengkap
+                </label>
+                <textarea
+                  id="shippingAddress"
+                  name="shippingAddress"
+                  rows={3}
+                  defaultValue={customer?.address ?? ""}
+                  required
+                  placeholder="Nama jalan, nomor rumah, kecamatan, kota, dan catatan alamat"
+                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-3 text-sm outline-none transition placeholder:text-slate-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                />
+              </div>
+            </section>
+
+            <section className="rounded-[8px] bg-white shadow-sm ring-1 ring-zinc-200">
+              <div className="flex items-center gap-3 border-b border-zinc-200 p-5 text-[#0d7a32]">
+                <PackageCheck className="h-5 w-5" aria-hidden="true" />
+                <h2 className="text-lg font-bold text-zinc-950">
+                  Produk Dipesan
+                </h2>
+              </div>
+
             {items.length > 0 ? (
               <div className="divide-y divide-zinc-200">
                 {items.map((item) => (
@@ -147,6 +260,63 @@ export function CartView({ products }: CartViewProps) {
                 </p>
               </div>
             )}
+            </section>
+
+            <section className="rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-zinc-200">
+              <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
+                <div>
+                  <label
+                    htmlFor="notes"
+                    className="flex items-center gap-2 text-sm font-semibold text-[#007a20]"
+                  >
+                    <MessageSquareText className="h-4 w-4" aria-hidden="true" />
+                    Pesan
+                  </label>
+                  <input
+                    id="notes"
+                    name="notes"
+                    type="text"
+                    placeholder="Opsional: tinggalkan pesan"
+                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition placeholder:text-slate-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                  />
+                </div>
+                <div>
+                  <p className="flex items-center gap-2 text-sm font-semibold text-[#007a20]">
+                    <Truck className="h-4 w-4" aria-hidden="true" />
+                    Opsi Pengiriman
+                  </p>
+                  <div className="mt-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-zinc-700">
+                    <p className="font-bold text-[#0d7a32]">Kurir Natura Fresh</p>
+                    <p className="mt-1">
+                      Gratis ongkir untuk pesanan minimal Rp250.000.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-zinc-200">
+              <h2 className="text-lg font-bold text-zinc-950">
+                Metode Pembayaran
+              </h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {["Transfer Bank", "COD", "QRIS"].map((method) => (
+                  <label
+                    key={method}
+                    className="flex h-11 cursor-pointer items-center justify-center rounded-md border border-zinc-200 px-3 text-sm font-bold text-zinc-700 transition has-[:checked]:border-[#0d7a32] has-[:checked]:bg-emerald-50 has-[:checked]:text-[#0d7a32]"
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={method}
+                      defaultChecked={method === "Transfer Bank"}
+                      className="sr-only"
+                    />
+                    {method}
+                  </label>
+                ))}
+              </div>
+            </section>
           </div>
 
           <aside className="h-fit rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-zinc-200">
@@ -168,6 +338,12 @@ export function CartView({ products }: CartViewProps) {
                 </dd>
               </div>
               <div className="border-t border-zinc-200 pt-3">
+                <div className="mb-3 flex items-center justify-between gap-4">
+                  <dt className="text-zinc-600">Biaya layanan</dt>
+                  <dd className="font-bold text-zinc-950">
+                    {formatter.format(serviceFee)}
+                  </dd>
+                </div>
                 <div className="flex items-center justify-between gap-4">
                   <dt className="font-bold text-zinc-950">Total</dt>
                   <dd className="text-xl font-bold text-[#007a20]">
@@ -176,19 +352,6 @@ export function CartView({ products }: CartViewProps) {
                 </div>
               </div>
             </dl>
-            <form
-              action={(formData: FormData) => {
-                startTransition(async () => {
-                  const result = await checkoutCart(items, subtotal, shippingCost, total);
-                  if (result?.success) {
-                clearCart(); // Kosongkan keranjang setelah checkout
-                    router.push("/profile"); // Arahkan ke halaman profil
-                  } else {
-                    alert(result?.message || "Gagal membuat pesanan");
-                  }
-                });
-              }}
-            >
               <button
                 type="submit"
                 disabled={items.length === 0 || isPending}
@@ -201,9 +364,8 @@ export function CartView({ products }: CartViewProps) {
                 )}
                 {isPending ? "Memproses..." : "Buat Pesanan"}
               </button>
-            </form>
           </aside>
-        </div>
+        </form>
 
         {products.length > 0 ? (
           <div className="mt-10">

@@ -25,7 +25,10 @@ export type Product = {
 
 export type PriceListItem = {
   product: string;
-  prices: PriceTier;
+  tiers: {
+    label: string;
+    price: string;
+  }[];
 };
 
 export type Benefit = {

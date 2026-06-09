@@ -12,10 +12,10 @@ export function PriceListSection({ priceList }: PriceListSectionProps) {
           Pricelist
         </p>
         <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-          Harga ayam per kilogram
+          Harga produk ayam dan telur
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600">
-          Free delivery untuk minimal belanja Rp250.000 sesuai pricelist.
+          Gratis pengiriman untuk minimal belanja Rp250.000 sesuai pricelist.
         </p>
 
         <div className="mt-8 overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-zinc-200">
@@ -24,28 +24,32 @@ export function PriceListSection({ priceList }: PriceListSectionProps) {
               <thead className="bg-[#176b2c] text-white">
                 <tr>
                   <th className="px-5 py-4 text-base font-bold">Produk</th>
-                  <th className="px-5 py-4 text-base font-bold">1 - 4 kg</th>
-                  <th className="px-5 py-4 text-base font-bold">&gt;5kg</th>
-                  <th className="px-5 py-4 text-base font-bold">&gt;25kg</th>
+                  <th className="px-5 py-4 text-base font-bold">Pemesanan</th>
+                  <th className="px-5 py-4 text-base font-bold">Harga</th>
                 </tr>
               </thead>
               <tbody>
-                {priceList.map((item) => (
-                  <tr key={item.product} className="border-t border-zinc-200">
-                    <td className="px-5 py-4 font-bold uppercase tracking-wide text-zinc-900">
-                      {item.product}
-                    </td>
-                    <td className="px-5 py-4 text-zinc-700">
-                      Rp{item.prices.oneToFourKg}
-                    </td>
-                    <td className="bg-[#ffc25f] px-5 py-4 text-zinc-950">
-                      Rp{item.prices.aboveFiveKg}
-                    </td>
-                    <td className="px-5 py-4 text-zinc-700">
-                      Rp{item.prices.aboveTwentyFiveKg}
-                    </td>
-                  </tr>
-                ))}
+                {priceList.flatMap((item) =>
+                  item.tiers.map((tier, index) => (
+                    <tr
+                      key={`${item.product}-${tier.label}`}
+                      className="border-t border-zinc-200"
+                    >
+                      {index === 0 ? (
+                        <td
+                          rowSpan={item.tiers.length}
+                          className="px-5 py-4 align-top font-bold uppercase tracking-wide text-zinc-900"
+                        >
+                          {item.product}
+                        </td>
+                      ) : null}
+                      <td className="px-5 py-4 text-zinc-700">{tier.label}</td>
+                      <td className="bg-[#ffc25f] px-5 py-4 font-bold text-zinc-950">
+                        {tier.price}
+                      </td>
+                    </tr>
+                  )),
+                )}
               </tbody>
             </table>
           </div>

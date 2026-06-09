@@ -96,91 +96,116 @@ export const featuredProducts: Product[] = [
 export const priceList: PriceListItem[] = [
   {
     product: "Boneless Dada",
-    prices: {
-      oneToFourKg: "48.500",
-      aboveFiveKg: "47.000",
-      aboveTwentyFiveKg: "46.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp48.500/kg" },
+      { label: ">5 kg", price: "Rp47.000/kg" },
+      { label: ">25 kg", price: "Rp46.500/kg" },
+    ],
   },
   {
     product: "Boneless Paha",
-    prices: {
-      oneToFourKg: "47.500",
-      aboveFiveKg: "46.000",
-      aboveTwentyFiveKg: "44.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp47.500/kg" },
+      { label: ">5 kg", price: "Rp46.000/kg" },
+      { label: ">25 kg", price: "Rp44.500/kg" },
+    ],
   },
   {
     product: "Boneless Dada Kulit",
-    prices: {
-      oneToFourKg: "48.000",
-      aboveFiveKg: "46.500",
-      aboveTwentyFiveKg: "46.000",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp48.000/kg" },
+      { label: ">5 kg", price: "Rp46.500/kg" },
+      { label: ">25 kg", price: "Rp46.000/kg" },
+    ],
   },
   {
     product: "Boneless Paha Kulit",
-    prices: {
-      oneToFourKg: "47.000",
-      aboveFiveKg: "45.500",
-      aboveTwentyFiveKg: "45.000",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp47.000/kg" },
+      { label: ">5 kg", price: "Rp45.500/kg" },
+      { label: ">25 kg", price: "Rp45.000/kg" },
+    ],
   },
   {
     product: "Paha Utuh / Pistol",
-    prices: {
-      oneToFourKg: "47.500",
-      aboveFiveKg: "46.000",
-      aboveTwentyFiveKg: "45.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp47.500/kg" },
+      { label: ">5 kg", price: "Rp46.000/kg" },
+      { label: ">25 kg", price: "Rp45.500/kg" },
+    ],
   },
   {
     product: "Paha Atas",
-    prices: {
-      oneToFourKg: "47.500",
-      aboveFiveKg: "46.000",
-      aboveTwentyFiveKg: "45.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp47.500/kg" },
+      { label: ">5 kg", price: "Rp46.000/kg" },
+      { label: ">25 kg", price: "Rp45.500/kg" },
+    ],
   },
   {
     product: "Paha Pentung",
-    prices: {
-      oneToFourKg: "48.500",
-      aboveFiveKg: "47.000",
-      aboveTwentyFiveKg: "46.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp48.500/kg" },
+      { label: ">5 kg", price: "Rp47.000/kg" },
+      { label: ">25 kg", price: "Rp46.500/kg" },
+    ],
   },
   {
     product: "Sayap",
-    prices: {
-      oneToFourKg: "40.500",
-      aboveFiveKg: "39.000",
-      aboveTwentyFiveKg: "38.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp40.500/kg" },
+      { label: ">5 kg", price: "Rp39.000/kg" },
+      { label: ">25 kg", price: "Rp38.500/kg" },
+    ],
   },
   {
     product: "Kulit",
-    prices: {
-      oneToFourKg: "38.500",
-      aboveFiveKg: "37.000",
-      aboveTwentyFiveKg: "36.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp38.500/kg" },
+      { label: ">5 kg", price: "Rp37.000/kg" },
+      { label: ">25 kg", price: "Rp36.500/kg" },
+    ],
   },
   {
     product: "Ceker",
-    prices: {
-      oneToFourKg: "27.000",
-      aboveFiveKg: "26.000",
-      aboveTwentyFiveKg: "25.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp27.000/kg" },
+      { label: ">5 kg", price: "Rp26.000/kg" },
+      { label: ">25 kg", price: "Rp25.500/kg" },
+    ],
   },
   {
     product: "Karkas 0,9-1kg",
-    prices: {
-      oneToFourKg: "43.500",
-      aboveFiveKg: "42.000",
-      aboveTwentyFiveKg: "41.500",
-    },
+    tiers: [
+      { label: "1 - 4 kg", price: "Rp43.500/kg" },
+      { label: ">5 kg", price: "Rp42.000/kg" },
+      { label: ">25 kg", price: "Rp41.500/kg" },
+    ],
+  },
+  {
+    product: "Telur Ayam Negeri Segar (Yellow Yolk)",
+    tiers: [
+      { label: "500 gram", price: "Rp18.000" },
+      { label: "1 - 200 kg", price: "Rp28.000/kg" },
+      { label: ">200 kg", price: "Negosiasi" },
+    ],
+  },
+  {
+    product: "Telur Ayam Omega Low Cholesterol (Orange Yolk)",
+    tiers: [
+      { label: "1 pax isi 10 butir", price: "Rp35.000/pax" },
+      { label: ">5 pax", price: "Rp34.000/pax" },
+      { label: ">10 pax", price: "Rp33.000/pax" },
+    ],
+  },
+  {
+    product: "Telur Ayam Omega Ultra (Orange Yolk)",
+    tiers: [
+      { label: "1 pax isi 10 butir", price: "Rp30.000/pax" },
+      { label: ">5 pax", price: "Rp29.000/pax" },
+      { label: ">10 pax", price: "Rp28.000/pax" },
+      { label: "1 kg", price: "Rp35.000/kg" },
+    ],
   },
 ];
 

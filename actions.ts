@@ -1,48 +1,115 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "@/backend/auth/session";
 import { prisma } from "@/backend/db";
 
-export async function checkoutCart(items: any[], subtotal: number, shippingCost: number, totalAmount: number) {
-  try {
-    // 1. Ambil data user yang sedang login (Sesuaikan dengan fungsi auth Anda)
-    // const session = await getSession();
-    // if (!session?.user) {
-    //   return { success: false, message: "Silakan login terlebih dahulu untuk membuat pesanan." };
-    // }
+type CheckoutItem = {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  quantity: number;
+};
 
-    // 2. Menyimpan pesanan ke database menggunakan Enum asli dari Prisma (PENDING, UNPAID)
-    // Catatan: Data userId, customerName, dll di bawah adalah CONTOH DUMMY.
-    // Nantinya wajib diganti dengan data asli dari variabel 'session.user' milik Anda.
+type CheckoutDetails = {
+  customerName: string;
+  customerPhone: string;
+  shippingAddress: string;
+  notes: string;
+  paymentMethod: string;
+};
+
+export async function checkoutCart(
+  items: CheckoutItem[],
+  subtotal: number,
+  shippingCost: number,
+  totalAmount: number,
+  details: CheckoutDetails,
+) {
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "Silakan masuk akun terlebih dahulu untuk membuat pesanan.",
+      };
+    }
+
+    if (items.length === 0) {
+      return {
+        success: false,
+        message: "Keranjang masih kosong.",
+      };
+    }
+
+    const customerName = details.customerName.trim();
+    const customerPhone = details.customerPhone.trim();
+    const shippingAddress = details.shippingAddress.trim();
+    const notes = details.notes.trim();
+    const paymentMethod = details.paymentMethod.trim() || "Transfer Bank";
+
+    if (!customerName || !customerPhone || !shippingAddress) {
+      return {
+        success: false,
+        message: "Nama penerima, nomor WhatsApp, dan alamat pengiriman wajib diisi.",
+      };
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: currentUser.id },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        address: true,
+      },
+    });
+
+    if (!user) {
+      return {
+        success: false,
+        message: "Data akun tidak ditemukan. Silakan masuk ulang.",
+      };
+    }
+
     const orderNumber = `ORD-${Date.now()}`;
 
     await prisma.order.create({
       data: {
-        orderNumber: orderNumber,
-        userId: 1, // <--- SEMENTARA DI-HARDCODE UNTUK TESTING
-        subtotal: subtotal,
-        shippingCost: shippingCost,
+        orderNumber,
+        userId: user.id,
+        subtotal,
+        shippingCost,
         total: totalAmount,
-        status: "PENDING", 
-        paymentStatus: "UNPAID", 
-        customerName: "Pelanggan Guest", // <--- Ganti dengan data user
-        customerPhone: "080000000000",   // <--- Ganti dengan data user
-        shippingAddress: "Alamat belum diisi", // <--- Ganti dengan data user
+        status: "PENDING",
+        paymentStatus: "UNPAID",
+        customerName,
+        customerPhone,
+        shippingAddress,
+        notes: notes
+          ? `${notes}\nMetode pembayaran: ${paymentMethod}`
+          : `Metode pembayaran: ${paymentMethod}`,
         items: {
-          create: items.map(item => ({
+          create: items.map((item) => ({
             productId: item.id,
             productName: item.name,
             productSlug: item.slug,
             unitPrice: item.price,
             quantity: item.quantity,
             totalPrice: item.price * item.quantity,
-          }))
-        }
-      }
+          })),
+        },
+      },
     });
 
-    // 3. Revalidasi halaman profil agar daftar pesanan terbaru muncul
+    await prisma.cartItem.deleteMany({
+      where: { userId: user.id },
+    });
+
     revalidatePath("/profile");
+    revalidatePath("/cart");
     return { success: true, message: "Pesanan berhasil dibuat!" };
   } catch (error) {
     console.error("Checkout error:", error);
@@ -54,7 +121,14 @@ export async function checkoutCart(items: any[], subtotal: number, shippingCost:
 
 export async function updateCartItemDB(productId: number, quantity: number) {
   try {
-    const userId = 1; // <--- SEMENTARA DI-HARDCODE UNTUK TESTING
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return;
+    }
+
+    const userId = currentUser.id;
+
     await prisma.cartItem.upsert({
       where: { userId_productId: { userId, productId } },
       update: { quantity },
@@ -67,7 +141,14 @@ export async function updateCartItemDB(productId: number, quantity: number) {
 
 export async function removeCartItemDB(productId: number) {
   try {
-    const userId = 1; // <--- SEMENTARA DI-HARDCODE
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return;
+    }
+
+    const userId = currentUser.id;
+
     await prisma.cartItem.deleteMany({
       where: { userId, productId },
     });
@@ -78,7 +159,14 @@ export async function removeCartItemDB(productId: number) {
 
 export async function clearCartDB() {
   try {
-    const userId = 1; // <--- SEMENTARA DI-HARDCODE
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return;
+    }
+
+    const userId = currentUser.id;
+
     await prisma.cartItem.deleteMany({
       where: { userId },
     });
@@ -89,12 +177,19 @@ export async function clearCartDB() {
 
 export async function getCartItemsDB() {
   try {
-    const userId = 1; // <--- SEMENTARA DI-HARDCODE
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return [];
+    }
+
+    const userId = currentUser.id;
+
     const dbItems = await prisma.cartItem.findMany({
       where: { userId },
       include: { product: true },
     });
-    
+
     return dbItems.map((item) => ({
       id: item.product.id,
       name: item.product.name,
