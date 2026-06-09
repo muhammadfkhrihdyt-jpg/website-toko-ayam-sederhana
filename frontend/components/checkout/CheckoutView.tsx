@@ -43,8 +43,8 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
   const total = subtotal + shippingCost + serviceFee;
 
   return (
-    <section className="bg-[#fbfaf7] py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+    <section className="bg-[#fbfaf7] pb-32 pt-12 sm:py-16 lg:pb-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wide text-[#d97706]">
             Checkout
@@ -107,7 +107,7 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
                     type="text"
                     defaultValue={customer?.name ?? ""}
                     required
-                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                    className="mt-2 min-h-12 w-full rounded-md border border-slate-200 px-3 py-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
                   />
                 </div>
                 <div>
@@ -123,7 +123,8 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
                     type="tel"
                     defaultValue={customer?.phone ?? ""}
                     required
-                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                    inputMode="tel"
+                    className="mt-2 min-h-12 w-full rounded-md border border-slate-200 px-3 py-3 text-sm outline-none transition focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
                   />
                 </div>
               </div>
@@ -220,7 +221,7 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
                     name="notes"
                     type="text"
                     placeholder="Opsional: tinggalkan pesan"
-                    className="mt-2 h-11 w-full rounded-md border border-slate-200 px-3 text-sm outline-none transition placeholder:text-slate-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                  className="mt-2 min-h-12 w-full rounded-md border border-slate-200 px-3 py-3 text-sm outline-none transition placeholder:text-slate-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
                   />
                 </div>
                 <div>
@@ -246,7 +247,7 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
                 {["Transfer Bank", "COD", "QRIS"].map((method) => (
                   <label
                     key={method}
-                    className="flex h-11 cursor-pointer items-center justify-center rounded-md border border-zinc-200 px-3 text-sm font-bold text-zinc-700 transition has-[:checked]:border-[#0d7a32] has-[:checked]:bg-emerald-50 has-[:checked]:text-[#0d7a32]"
+                    className="flex min-h-12 cursor-pointer items-center justify-center rounded-md border border-zinc-200 px-4 py-3 text-sm font-bold text-zinc-700 transition active:scale-[0.98] has-[:checked]:border-[#0d7a32] has-[:checked]:bg-emerald-50 has-[:checked]:text-[#0d7a32]"
                   >
                     <input
                       type="radio"
@@ -298,7 +299,7 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
             <button
               type="submit"
               disabled={items.length === 0 || isPending}
-              className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] text-sm font-bold text-white transition hover:bg-[#009d0d] disabled:cursor-not-allowed disabled:bg-zinc-400"
+              className="mt-6 hidden h-12 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] px-4 py-3 text-sm font-bold text-white transition active:scale-[0.98] hover:bg-[#009d0d] disabled:cursor-not-allowed disabled:bg-zinc-400 lg:inline-flex"
             >
               {isPending ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
@@ -308,6 +309,28 @@ export function CheckoutView({ customer }: CheckoutViewProps) {
               {isPending ? "Memproses..." : "Buat Pesanan"}
             </button>
           </aside>
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur lg:hidden">
+            <div className="mx-auto flex max-w-7xl items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-zinc-500">Total pembayaran</p>
+                <p className="truncate text-lg font-bold text-[#0d7a32]">
+                  {formatter.format(total)}
+                </p>
+              </div>
+              <button
+                type="submit"
+                disabled={items.length === 0 || isPending}
+                className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-md bg-[#00b80f] px-5 py-3 text-sm font-bold text-white transition active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-zinc-400"
+              >
+                {isPending ? (
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+                ) : (
+                  <CreditCard className="h-5 w-5" aria-hidden="true" />
+                )}
+                {isPending ? "Proses..." : "Buat Pesanan"}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </section>

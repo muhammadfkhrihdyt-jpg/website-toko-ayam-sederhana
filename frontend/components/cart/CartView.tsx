@@ -37,8 +37,8 @@ export function CartView({ products }: CartViewProps) {
   const total = subtotal + shippingCost;
 
   return (
-    <section className="bg-[#fbfaf7] py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+    <section className="bg-[#fbfaf7] pb-32 pt-12 sm:py-16 lg:pb-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-[#d97706]">
@@ -98,7 +98,7 @@ export function CartView({ products }: CartViewProps) {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="flex h-10 w-10 items-center justify-center text-[#007a20] transition hover:bg-emerald-50"
+                          className="flex h-12 w-12 items-center justify-center p-3 text-[#007a20] transition active:scale-95 hover:bg-emerald-50"
                           aria-label={`Kurangi ${item.name}`}
                         >
                           <Minus className="h-4 w-4" aria-hidden="true" />
@@ -109,7 +109,7 @@ export function CartView({ products }: CartViewProps) {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="flex h-10 w-10 items-center justify-center text-[#007a20] transition hover:bg-emerald-50"
+                          className="flex h-12 w-12 items-center justify-center p-3 text-[#007a20] transition active:scale-95 hover:bg-emerald-50"
                           aria-label={`Tambah ${item.name}`}
                         >
                           <Plus className="h-4 w-4" aria-hidden="true" />
@@ -122,7 +122,7 @@ export function CartView({ products }: CartViewProps) {
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-red-600 transition hover:text-red-700"
+                          className="mt-1 inline-flex min-h-11 items-center gap-1 rounded-md px-3 py-2 text-xs font-bold text-red-600 transition active:scale-95 hover:bg-red-50 hover:text-red-700"
                         >
                           <Trash2 className="h-4 w-4" aria-hidden="true" />
                           Hapus
@@ -174,7 +174,7 @@ export function CartView({ products }: CartViewProps) {
             {items.length > 0 ? (
               <Link
                 href="/checkout"
-                className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] text-sm font-bold text-white transition hover:bg-[#009d0d]"
+                className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] px-4 py-3 text-sm font-bold text-white transition active:scale-[0.98] hover:bg-[#009d0d]"
               >
                 <CreditCard className="h-5 w-5" aria-hidden="true" />
                 Lanjut Checkout
@@ -201,7 +201,7 @@ export function CartView({ products }: CartViewProps) {
                   key={product.id}
                   type="button"
                   onClick={() => addProduct(product)}
-                  className="rounded-[8px] bg-white p-4 text-left shadow-sm ring-1 ring-zinc-200 transition hover:-translate-y-0.5 hover:ring-emerald-300"
+                  className="rounded-[8px] bg-white p-4 text-left shadow-sm ring-1 ring-zinc-200 transition active:scale-[0.99] hover:-translate-y-0.5 hover:ring-emerald-300"
                 >
                   <p className="text-sm font-bold text-zinc-950">{product.name}</p>
                   <p className="mt-1 text-xs text-zinc-500">{product.category}</p>
@@ -214,6 +214,25 @@ export function CartView({ products }: CartViewProps) {
           </div>
         ) : null}
       </div>
+      {items.length > 0 ? (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-zinc-200 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur lg:hidden">
+          <div className="mx-auto flex max-w-7xl items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-zinc-500">Estimasi total</p>
+              <p className="truncate text-lg font-bold text-[#0d7a32]">
+                {formatter.format(total)}
+              </p>
+            </div>
+            <Link
+              href="/checkout"
+              className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-md bg-[#00b80f] px-5 py-3 text-sm font-bold text-white transition active:scale-[0.98]"
+            >
+              <CreditCard className="h-5 w-5" aria-hidden="true" />
+              Checkout
+            </Link>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

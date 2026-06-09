@@ -38,7 +38,7 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-100 bg-white">
-      <div className="mx-auto grid h-24 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-6 sm:px-8 lg:px-10">
+      <div className="mx-auto grid min-h-20 max-w-7xl grid-cols-[auto_1fr] items-center gap-3 px-4 py-3 sm:grid-cols-[1fr_auto_1fr] sm:px-8 lg:px-10">
         <Link href="/" className="inline-flex shrink-0 items-center">
           <Image
             src="/brand/natura-fresh-logo.png"
@@ -46,7 +46,7 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
             width={174}
             height={120}
             priority
-            className="h-12 w-auto"
+            className="h-11 w-auto sm:h-12"
           />
         </Link>
 
@@ -62,12 +62,12 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
           ))}
         </nav>
 
-        <div className="flex items-center justify-end gap-5 text-[#007a20]">
+        <div className="flex items-center justify-end gap-2 text-[#007a20] sm:gap-4 lg:gap-5">
           <div className="relative">
             <button
               type="button"
               onClick={() => setShowSearch((current) => !current)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md transition hover:bg-emerald-50"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-md p-3 transition active:scale-95 hover:bg-emerald-50"
               aria-label="Cari produk"
             >
               <Search className="h-6 w-6" aria-hidden="true" />
@@ -75,7 +75,7 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
             {showSearch ? (
               <form
                 onSubmit={submitSearch}
-                className="absolute right-0 top-12 z-50 flex w-[min(78vw,320px)] items-center gap-2 rounded-[8px] bg-white p-2 shadow-xl ring-1 ring-zinc-200"
+                className="absolute right-0 top-14 z-50 flex w-[min(86vw,340px)] items-center gap-2 rounded-[8px] bg-white p-3 shadow-xl ring-1 ring-zinc-200"
               >
                 <label htmlFor="header-search-produk" className="sr-only">
                   Cari produk
@@ -87,11 +87,11 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Cari ayam, telur, omega..."
                   autoFocus
-                  className="h-10 min-w-0 flex-1 rounded-md border border-zinc-200 px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
+                  className="h-12 min-w-0 flex-1 rounded-md border border-zinc-200 px-3 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-500 focus:border-[#00a51f] focus:ring-4 focus:ring-emerald-100"
                 />
                 <button
                   type="submit"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#00b80f] text-white transition hover:bg-[#009d0d]"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#00b80f] p-3 text-white transition active:scale-95 hover:bg-[#009d0d]"
                   aria-label="Jalankan pencarian"
                 >
                   <Search className="h-5 w-5" aria-hidden="true" />
@@ -101,14 +101,14 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
           </div>
           <Link
             href="/#harga"
-            className="hidden items-center gap-2 text-sm font-semibold transition hover:text-[#d97706] sm:inline-flex"
+            className="hidden min-h-12 items-center gap-2 rounded-md px-3 py-3 text-sm font-semibold transition active:scale-95 hover:bg-emerald-50 hover:text-[#d97706] sm:inline-flex"
           >
             <List className="h-5 w-5" aria-hidden="true" />
             Price List
           </Link>
           <Link
             href={currentUser ? "/profile" : "/login"}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-md px-2 text-sm font-semibold transition hover:bg-emerald-50 hover:text-[#d97706]"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-semibold transition active:scale-95 hover:bg-emerald-50 hover:text-[#d97706]"
             aria-label={currentUser ? "Profil saya" : "Masuk"}
           >
             <UserRound className="h-6 w-6" aria-hidden="true" />
@@ -118,17 +118,17 @@ export function SiteHeader({ currentUser }: SiteHeaderProps) {
           </Link>
           <Link
             href="/cart"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md transition hover:bg-emerald-50"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-md p-3 transition active:scale-95 hover:bg-emerald-50"
             aria-label="Keranjang"
           >
-        <div className="relative">
-          <ShoppingBag className="h-6 w-6" aria-hidden="true" />
-          {cartCount > 0 && (
-            <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
-              {cartCount}
-            </span>
-          )}
-        </div>
+            <div className="relative">
+              <ShoppingBag className="h-6 w-6" aria-hidden="true" />
+              {cartCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
+            </div>
           </Link>
         </div>
       </div>

@@ -37,11 +37,8 @@ export function FeaturedProductsSection({ products }: FeaturedProductsSectionPro
   }, [products, query]);
 
   return (
-    <section
-      id="produk-unggulan"
-      className="border-y border-zinc-200 bg-white py-16"
-    >
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
+    <section id="produk-unggulan" className="border-y border-zinc-200 bg-white py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-wide text-[#d97706]">
             Produk
@@ -60,11 +57,11 @@ export function FeaturedProductsSection({ products }: FeaturedProductsSectionPro
           ) : null}
         </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {filteredProducts.map((product) => (
             <article
               key={product.id}
-              className="group overflow-hidden rounded-[8px] bg-[#fbfaf7] shadow-sm ring-1 ring-zinc-200 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-950/10 hover:ring-emerald-200"
+              className="group overflow-hidden rounded-[8px] bg-[#fbfaf7] shadow-sm ring-1 ring-zinc-200 transition duration-300 active:scale-[0.99] hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-950/10 hover:ring-emerald-200"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
                 {product.imageUrl ? (
@@ -105,7 +102,7 @@ export function FeaturedProductsSection({ products }: FeaturedProductsSectionPro
                   type="button"
                   onClick={() => addProduct(product)}
                   disabled={product.stock <= 0}
-                  className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] text-sm font-bold text-white transition hover:bg-[#009d0d] disabled:cursor-not-allowed disabled:bg-zinc-400"
+                  className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[#00b80f] px-4 py-3 text-sm font-bold text-white transition active:scale-[0.98] hover:bg-[#009d0d] disabled:cursor-not-allowed disabled:bg-zinc-400"
                 >
                   <ShoppingCart className="h-5 w-5" aria-hidden="true" />
                   Masukkan Keranjang

@@ -91,6 +91,30 @@ export const featuredProducts: Product[] = [
       aboveTwentyFiveKg: "41.500",
     },
   },
+  {
+    name: "Kulit Ayam",
+    category: "Specific Part",
+    description: "Kulit ayam segar berkualitas, cocok untuk komoditas usaha krispi atau sate.",
+    image: "/products/kulit.jpg",
+    badge: "Fresh",
+    prices: {
+      oneToFourKg: "38.500",
+      aboveFiveKg: "37.000",
+      aboveTwentyFiveKg: "36.500",
+    },
+  },
+  {
+    name: "Ceker Ayam",
+    category: "Specific Part",
+    description: "Ceker ayam bersih, higienis, dan siap diolah untuk kaldu atau hidangan sup.",
+    image: "/products/ceker.jpg",
+    badge: "Fresh",
+    prices: {
+      oneToFourKg: "27.000",
+      aboveFiveKg: "26.000",
+      aboveTwentyFiveKg: "25.500",
+    },
+  },
 ];
 
 export const priceList: PriceListItem[] = [
@@ -211,7 +235,7 @@ export const priceList: PriceListItem[] = [
 
 export const benefits: Benefit[] = [
   {
-    title: "Kualitas Kompetitif",
+    title: "Kualitas Competitive",
     description:
       "NFI berprinsip memberikan kualitas terbaik dengan harga kompetitif.",
     icon: ShieldCheck,
