@@ -110,6 +110,7 @@ export async function checkoutCart(
 
     revalidatePath("/profile");
     revalidatePath("/cart");
+    revalidatePath("/checkout");
     return { success: true, message: "Pesanan berhasil dibuat!" };
   } catch (error) {
     console.error("Checkout error:", error);
